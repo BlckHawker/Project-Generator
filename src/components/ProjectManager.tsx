@@ -7,7 +7,6 @@ function ProjectManager() {
     return (
         <div style={{gap: "10px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
             <h1>Projects</h1>
-            {/* <Project/> */}
             {projects.map((_, index)=> <Project projectIndex={index} projects={projects} setProjects={setProjects}/>)}
             <button onClick={() => addProjectButton()}>Add project</button>
             <button>Make JSON</button>
