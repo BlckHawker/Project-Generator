@@ -1,6 +1,16 @@
+import { ProjectInterface } from "../interfaces/ProjectInterface";
 import LinkManager from "./LinkManager";
+import { useState } from "react";
 
-function Project() {
+
+interface Props {
+    projectIndex: number
+    projects: ProjectInterface[]
+    setProjects: React.Dispatch<React.SetStateAction<ProjectInterface[]>>
+}
+
+function Project(props: Props) {
+    const [projectIndex, setProjectIndex] = useState<number>(props.projectIndex)
     return (
       <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center", border:"2px solid #ddd"}}>
         {/* Title Text box */}
@@ -48,10 +58,17 @@ function Project() {
         {/* Links */}
         <h2>Links</h2>
         <LinkManager/>
-        
+        <button onClick={() => deleteProjectButton()}>Delete Project</button>
       </div>
 
     );
+
+    function deleteProjectButton()
+    {
+        //delete the project that has the specified index
+        const newProjects = props.projects.filter((_, index) => index != projectIndex);
+        props.setProjects(newProjects)
+    }
   }
 
   export default Project;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Project from "./Project";
-import { ProjectInterface } from "../interfaces/ProjectInerface";
+import { ProjectInterface } from "../interfaces/ProjectInterface";
 
 function ProjectManager() {
     const [projects, setProjects] = useState<ProjectInterface[]>([])
@@ -8,14 +8,14 @@ function ProjectManager() {
         <div style={{gap: "10px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
             <h1>Projects</h1>
             {/* <Project/> */}
-            {projects.map(_ => <Project/>)}
-            <button onClick={() => AddProjectButton()}>Add project</button>
+            {projects.map((_, index)=> <Project projectIndex={index} projects={projects} setProjects={setProjects}/>)}
+            <button onClick={() => addProjectButton()}>Add project</button>
             <button>Make JSON</button>
             <textarea disabled></textarea>
         </div>
     );
 
-    function AddProjectButton()
+    function addProjectButton()
     {
         const newProject: ProjectInterface = {
             title: "",
