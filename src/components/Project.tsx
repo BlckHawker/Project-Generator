@@ -2,8 +2,7 @@ import LinkManager from "./LinkManager";
 
 function Project() {
     return (
-      <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center"}}>
-        <h2>Meta Data</h2>
+      <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center", border:"2px solid #ddd"}}>
         {/* Title Text box */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Title:</p>
@@ -39,9 +38,6 @@ function Project() {
             <p>Description:</p>
             <textarea></textarea>
         </div>
-        {/* Links */}
-        <h2>Links</h2>
-        <LinkManager/>
         {/* Image */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Image:</p>
@@ -49,6 +45,10 @@ function Project() {
             <input type="text" placeholder="Alt text"/>
 
         </div>
+        {/* Links */}
+        <h2>Links</h2>
+        <LinkManager/>
+        
       </div>
 
     );

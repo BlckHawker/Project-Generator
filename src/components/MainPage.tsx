@@ -1,7 +1,7 @@
 import ProjectManager from "./ProjectManager";
 function MainPage() {
     return (
-      <ProjectManager/>
+        <ProjectManager/>
     );
   }
 
