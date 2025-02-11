@@ -16,17 +16,17 @@ function Project(props: Props) {
         {/* Title Text box */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Title:</p>
-            <input type="text" />
+            <input type="text" onChange={titleOnChange}/>
         </div>
         {/* Start Date */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Start Date:</p>
-            <input type="date" min="2019-01-01" max="2100-12-31" />
+            <input type="date" min="2019-01-01" max="2100-12-31" onChange={startDateOnChange} />
         </div>
         {/* End Date */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>End Date:</p>
-            <input type="date" min="2019-01-01" max="2100-12-31" />
+            <input type="date" min="2019-01-01" max="2100-12-31" onChange={endDateOnChange}/>
         </div>
         {/* Languages */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -62,6 +62,32 @@ function Project(props: Props) {
       </div>
 
     );
+
+    function titleOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        const project: ProjectInterface = props.projects[props.projectIndex]; 
+        project.title = event.target.value;
+    }
+
+    function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        const project: ProjectInterface = props.projects[props.projectIndex]; 
+        project.startDate = getDate(event.target.value)
+    }
+
+    function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        const project: ProjectInterface = props.projects[props.projectIndex]; 
+        project.endDate = getDate(event.target.value)
+    }
+
+    function getDate(date: string)
+    {
+        const months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        const dateRegex = /(\d{4})-(\d{2})-(\d{2})/
+        const matches = date.match(dateRegex) ?? ["2025","01","01"]
+        return `${months[parseInt(matches[2])]} ${matches[1]}`
+    }
 
     function deleteProjectButton()
     {

@@ -9,10 +9,27 @@ function ProjectManager() {
             <h1>Projects</h1>
             {projects.map((_, index)=> <Project projectIndex={index} projects={projects} setProjects={setProjects}/>)}
             <button onClick={() => addProjectButton()}>Add project</button>
-            <button>Make JSON</button>
+            <button onClick={() => makeJSONApplication()}>Make JSON</button>
             <textarea disabled></textarea>
         </div>
     );
+
+    function makeJSONApplication()
+    {
+        //debug stuff: get first project for now
+        const firstProject = projects[0]
+        if(firstProject !== undefined)
+        {
+            console.log(`Title: ${firstProject.title}`)
+            console.log(`Start Date: ${firstProject.startDate}`)
+            console.log(`End Date: ${firstProject.endDate}`)
+            console.log(`Languages: ${firstProject.languages}`)
+            console.log(`Tools: ${firstProject.tools}`)
+            console.log(`Description: ${firstProject.description}`)
+            console.log(`Links: ${firstProject.links}`)
+            console.log(`Image: ${firstProject.image}`)
+        }
+    }
 
     function addProjectButton()
     {
