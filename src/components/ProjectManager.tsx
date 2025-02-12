@@ -24,10 +24,12 @@ function ProjectManager() {
             console.log(`Start Date: ${firstProject.startDate}`)
             console.log(`End Date: ${firstProject.endDate}`)
             console.log(`Languages: ${firstProject.languages}`)
+            console.log(`Libraries: ${firstProject.libraries}`)
             console.log(`Tools: ${firstProject.tools}`)
             console.log(`Description: ${firstProject.description}`)
             console.log(`Links: ${firstProject.links}`)
-            console.log(`Image: ${firstProject.image}`)
+            console.log(`Image src: ${firstProject.image.src}`)
+            console.log(`Image alt: ${firstProject.image.alt}`)
         }
     }
 

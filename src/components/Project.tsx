@@ -1,3 +1,4 @@
+import { ImageInterface } from "../interfaces/ImageInterface";
 import { ProjectInterface } from "../interfaces/ProjectInterface";
 import LinkManager from "./LinkManager";
 import { useState } from "react";
@@ -31,29 +32,28 @@ function Project(props: Props) {
         {/* Languages */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Languages:</p>
-            <input type="text" placeholder="Separate multiple languages with a ','" style={{width: "225px"}}/>
+            <input type="text" placeholder="Separate multiple languages with a ','" style={{width: "225px"}} onChange={languagesOnChange}/>
         </div>
         {/* Libraries */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Libraries:</p>
-            <input type="text" placeholder="Separate multiple libraries with a ','" style={{width: "225px"}}/>
+            <input type="text" placeholder="Separate multiple libraries with a ','" style={{width: "225px"}} onChange={librariesOnChange}/>
         </div>
         {/* Tools */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Tools:</p>
-            <input type="text" placeholder="Separate multiple tools with a ','" style={{width: "225px"}}/>
+            <input type="text" placeholder="Separate multiple tools with a ','" style={{width: "225px"}} onChange={toolsOnChange}/>
         </div>
         {/* Description */}
-        <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}} onChange={descriptionOnChange}>
             <p>Description:</p>
             <textarea></textarea>
         </div>
         {/* Image */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Image:</p>
-            <input type="file" id="myFile" name="filename"/>
-            <input type="text" placeholder="Alt text"/>
-
+            <input type="file" id="myFile" name="filename" onChange={fileSrcOnChange}/>
+            <input type="text" placeholder="Alt text" onChange={fileAltOnChange}/>
         </div>
         {/* Links */}
         <h2>Links</h2>
@@ -65,20 +65,39 @@ function Project(props: Props) {
 
     function titleOnChange(event: React.ChangeEvent<HTMLInputElement>)
     {
-        const project: ProjectInterface = props.projects[props.projectIndex]; 
-        project.title = event.target.value;
+        getProject().title = event.target.value;
     }
 
     function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
     {
-        const project: ProjectInterface = props.projects[props.projectIndex]; 
-        project.startDate = getDate(event.target.value)
+        getProject().startDate = getDate(event.target.value)
     }
 
     function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
     {
-        const project: ProjectInterface = props.projects[props.projectIndex]; 
-        project.endDate = getDate(event.target.value)
+        getProject().endDate = getDate(event.target.value)
+    }
+
+    function descriptionOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        //get rid of the white spaces
+        let description = event.target.value.trim()
+        getProject().description = description
+    }
+
+    function fileSrcOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        if(event.target !== null && event.target.files !== null)
+        {
+            const project: ProjectInterface = getProject();
+            const image: ImageInterface = project.image;
+            image.src = `img/${event.target.files[0].name}`
+        }
+    }
+
+    function fileAltOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        getProject().image.alt = event.target.value.trim();
     }
 
     function getDate(date: string)
@@ -89,11 +108,75 @@ function Project(props: Props) {
         return `${months[parseInt(matches[2])]} ${matches[1]}`
     }
 
+    function languagesOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        getProject().languages = getNewLanguageLibrariesTools(event);
+    }
+
+    function librariesOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        getProject().libraries = getNewLanguageLibrariesTools(event);
+    }
+
+    function toolsOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        getProject().tools = getNewLanguageLibrariesTools(event);
+    }
+
+    function getNewLanguageLibrariesTools(event: React.ChangeEvent<HTMLInputElement>)
+    {
+        let newArr: string[] = []
+        //trim the string of any white spaces
+        const string: string = event.target.value.trim();
+
+        //split the project based on the ',' character
+        let arr = string.split(',')
+
+        arr = arr
+        //trim each element so there are no white spaces and the start end 
+        .map(l => l.trim())
+        //remove any empty string elements 
+        .filter(l => l !== "")
+        
+        //for each element make it so the first character is capitalized and the rest are lower cased
+        for(const element of arr)
+        {
+            //remove any duplicate elements 
+            if(newArr.find(l => l.toUpperCase() === element.toUpperCase()) === undefined)
+            {
+                let newElement: string = "";
+                if(element.length == 1)
+                {
+                    newElement = element.toUpperCase();
+                }
+        
+                else if(element.length > 1)
+                {
+                    newElement = element.toUpperCase()[0] + element.substring(1).toLowerCase()
+                }
+    
+                if(newElement !== "")
+                {
+                    newArr.push(newElement)
+                }
+            }
+
+        }
+
+        //alphabetically sort the elements 
+        return newArr.sort((a, b) => a.localeCompare(b))
+    }
+
     function deleteProjectButton()
     {
         //delete the project that has the specified index
         const newProjects = props.projects.filter((_, index) => index != projectIndex);
         props.setProjects(newProjects)
+    }
+
+    function getProject()
+    {
+        return props.projects[props.projectIndex]; 
     }
   }
 
