@@ -70,7 +70,7 @@ function Project(props: Props) {
 
     function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
     {
-        getProject().startDate = getDate(event.target.value)
+        getProject().startDate = getDate(event.target.value);
     }
 
     function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
@@ -105,7 +105,11 @@ function Project(props: Props) {
         const months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         const dateRegex = /(\d{4})-(\d{2})-(\d{2})/
         const matches = date.match(dateRegex) ?? ["2025","01","01"]
-        return `${months[parseInt(matches[2])]} ${matches[1]}`
+
+        const finalDate = `${months[parseInt(matches[2])]} ${matches[1]}`
+
+        // if finalDate is "January 01", then the input is blank
+        return finalDate === "January 01" ?  "Present" : finalDate;
     }
 
     function languagesOnChange(event: React.ChangeEvent<HTMLInputElement>)

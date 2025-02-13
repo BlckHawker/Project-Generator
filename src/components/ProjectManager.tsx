@@ -33,6 +33,29 @@ function ProjectManager() {
         }
     }
 
+    function projectValid()
+    {
+        //todo title is ""
+
+        //todo there are multiple projects with the same title
+        
+        //todo: start date is "Present"
+
+        //todo start date is after end date
+
+        //todo there are no languages
+
+        //todo there are no libraries
+
+        //todo there are no tools
+
+        //todo 
+
+
+
+
+    }
+
     function addProjectButton()
     {
         const newProject: ProjectInterface = {
