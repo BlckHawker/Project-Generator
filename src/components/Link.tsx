@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { LinkInterface } from "../interfaces/LinkInterFace";
+import { ProjectInterface } from "../interfaces/ProjectInterface";
 
 interface Props {
+    project: ProjectInterface
     linkIndex: number
     links: LinkInterface[]
     setLinks: React.Dispatch<React.SetStateAction<LinkInterface[]>>
@@ -12,8 +14,8 @@ function Link(props: Props) {
     return (
     <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
         <p>Link {linkIndex}:</p>
-        <input type="text" placeholder="Name"/>
-        <input type="text" placeholder="URL"/>
+        <input type="text" placeholder="Name" onChange={nameOnChange}/>
+        <input type="text" placeholder="URL" onChange={urlOnChange}/>
         <button onClick={() => deleteProjectButton()}>Delete link</button>
     </div>
     );
@@ -24,6 +26,17 @@ function Link(props: Props) {
         const newProjects = props.links.filter((_, index) => index != linkIndex);
         props.setLinks(newProjects)
     }
+
+    function nameOnChange(event: React.ChangeEvent<HTMLInputElement>): void 
+    {
+        props.project.Links[linkIndex].Name = event.target.value;
+    }
+
+    function urlOnChange(event: React.ChangeEvent<HTMLInputElement>): void 
+    {
+        props.project.Links[linkIndex].Link = event.target.value;
+    }
+
   }
 
   

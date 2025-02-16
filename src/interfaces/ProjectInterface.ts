@@ -2,15 +2,15 @@ import { ImageInterface } from "./ImageInterface"
 import { LinkInterface } from "./LinkInterFace"
 
 interface ProjectInterface {
-    title: string,
-    startDate: string,
-    endDate: string,
-    languages: string[],
-    libraries: string[],
-    tools: string[],
-    description: string,
-    links: LinkInterface[],
-    image: ImageInterface
+    Title: string,
+    StartDate: string,
+    EndDate: string,
+    Languages: string[],
+    Libraries: string[],
+    Tools: string[],
+    Description: string,
+    Links: LinkInterface[],
+    Image: ImageInterface
 
 }
 

@@ -14,6 +14,7 @@ function Project(props: Props) {
     const [projectIndex, setProjectIndex] = useState<number>(props.projectIndex)
     return (
       <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center", border:"2px solid #ddd"}}>
+        <p>Project {projectIndex}</p>
         {/* Title Text box */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Title:</p>
@@ -57,50 +58,50 @@ function Project(props: Props) {
         </div>
         {/* Links */}
         <h2>Links</h2>
-        <LinkManager/>
+        <LinkManager project={props.projects[props.projectIndex]}/>
         <button onClick={() => deleteProjectButton()}>Delete Project</button>
       </div>
 
     );
 
-    function titleOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function titleOnChange(event: React.ChangeEvent<HTMLInputElement>) :void
     {
-        getProject().title = event.target.value;
+        getProject().Title = event.target.value;
     }
 
-    function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
-        getProject().startDate = getDate(event.target.value);
+        getProject().StartDate = getDate(event.target.value);
     }
 
-    function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
-        getProject().endDate = getDate(event.target.value)
+        getProject().EndDate = getDate(event.target.value)
     }
 
-    function descriptionOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function descriptionOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
         //get rid of the white spaces
         let description = event.target.value.trim()
-        getProject().description = description
+        getProject().Description = description
     }
 
-    function fileSrcOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function fileSrcOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
         if(event.target !== null && event.target.files !== null)
         {
             const project: ProjectInterface = getProject();
-            const image: ImageInterface = project.image;
+            const image: ImageInterface = project.Image;
             image.src = `img/${event.target.files[0].name}`
         }
     }
 
-    function fileAltOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function fileAltOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().image.alt = event.target.value.trim();
+        getProject().Image.alt = event.target.value.trim();
     }
 
-    function getDate(date: string)
+    function getDate(date: string): string
     {
         const months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         const dateRegex = /(\d{4})-(\d{2})-(\d{2})/
@@ -112,22 +113,22 @@ function Project(props: Props) {
         return finalDate === "January 01" ?  "Present" : finalDate;
     }
 
-    function languagesOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function languagesOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().languages = getNewLanguageLibrariesTools(event);
+        getProject().Languages = getNewLanguageLibrariesTools(event);
     }
 
-    function librariesOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function librariesOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().libraries = getNewLanguageLibrariesTools(event);
+        getProject().Libraries = getNewLanguageLibrariesTools(event);
     }
 
-    function toolsOnChange(event: React.ChangeEvent<HTMLInputElement>)
+    function toolsOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().tools = getNewLanguageLibrariesTools(event);
+        getProject().Tools = getNewLanguageLibrariesTools(event);
     }
 
-    function getNewLanguageLibrariesTools(event: React.ChangeEvent<HTMLInputElement>)
+    function getNewLanguageLibrariesTools(event: React.ChangeEvent<HTMLInputElement>): string[]
     {
         let newArr: string[] = []
         //trim the string of any white spaces
@@ -171,14 +172,14 @@ function Project(props: Props) {
         return newArr.sort((a, b) => a.localeCompare(b))
     }
 
-    function deleteProjectButton()
+    function deleteProjectButton(): void
     {
         //delete the project that has the specified index
         const newProjects = props.projects.filter((_, index) => index != projectIndex);
         props.setProjects(newProjects)
     }
 
-    function getProject()
+    function getProject(): ProjectInterface
     {
         return props.projects[props.projectIndex]; 
     }

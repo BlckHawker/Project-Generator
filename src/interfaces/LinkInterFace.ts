@@ -1,6 +1,6 @@
 interface LinkInterface {
-    name: string,
-    link: string
+    Name: string,
+    Link: string
 }
 
 export type { LinkInterface }

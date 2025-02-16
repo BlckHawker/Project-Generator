@@ -1,12 +1,17 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { LinkInterface } from "../interfaces/LinkInterFace";
 import Link from "./Link";
+import { ProjectInterface } from "../interfaces/ProjectInterface";
 
-function LinkManager() {
+interface Props {
+    project: ProjectInterface
+}
+
+function LinkManager(props: Props) {
     const [links, setLinks] = useState<LinkInterface[]>([])
     return (
         <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center"}}>
-            {links.map((_, index)=> <Link linkIndex={index} links={links} setLinks={setLinks}/>)}
+            {links.map((_, index)=> <Link linkIndex={index} links={links} setLinks={setLinks} project={props.project}/>)}
             <button onClick={() => addLinkButton()}>Add Link</button>
         </div>
     );
@@ -14,8 +19,8 @@ function LinkManager() {
     function addLinkButton()
     {
         const newLink: LinkInterface = {
-            name: "",
-            link: ""
+            Name: "",
+            Link: ""
         }
         const newLinks: LinkInterface[] = [];
         //get all of the current links
@@ -26,8 +31,9 @@ function LinkManager() {
 
         //and add the link
         newLinks.push(newLink)
-
+        
         setLinks(newLinks)
+        props.project.Links = newLinks;
     }
   }
 
