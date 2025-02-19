@@ -11,16 +11,18 @@ interface Props {
 
 function Link(props: Props) {
     const [linkIndex, setLinkIndex] = useState<number>(props.linkIndex)
+    const [name, setName] = useState<string>(props.links[props.linkIndex].Name)
+    const [url, setUrl] = useState<string>(props.links[props.linkIndex].Link)
     return (
     <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
         <p>Link {linkIndex}:</p>
         <input type="text" placeholder="Name" value={props.links[linkIndex].Name} onChange={nameOnChange}/>
         <input type="text" placeholder="URL" value={props.links[linkIndex].Link} onChange={urlOnChange}/>
-        <button onClick={() => deleteProjectButton()}>Delete link</button>
+        <button onClick={() => deleteLinkButton()}>Delete link</button>
     </div>
     );
 
-    function deleteProjectButton()
+    function deleteLinkButton()
     {
         //delete the project that has the specified index
         const newProjects = props.links.filter((_, index) => index != linkIndex);
@@ -29,12 +31,17 @@ function Link(props: Props) {
 
     function nameOnChange(event: React.ChangeEvent<HTMLInputElement>): void 
     {
-        props.project.Links[linkIndex].Name = event.target.value;
+        const linkName = event.target.value;
+        props.project.Links[linkIndex].Name = linkName;
+        setName(linkName)
+
     }
 
     function urlOnChange(event: React.ChangeEvent<HTMLInputElement>): void 
     {
-        props.project.Links[linkIndex].Link = event.target.value;
+        const url = event.target.value;
+        props.project.Links[linkIndex].Link = url;
+        setUrl(url)
     }
 
   }

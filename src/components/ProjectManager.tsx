@@ -121,26 +121,14 @@ function ProjectManager() {
             errors.push(validDatesWarning)
         }
 
-        //there are no languages
-        if(project.Languages.length === 0)
+        //there are no languages, libraries, nor tools combined
+        if(project.Languages.length + project.Libraries.length + project.Tools.length === 0)
         {
-            errors.push("Need to have at least one language")
+            errors.push("Need to have at least one language, library, or tool")
         }
-
-        //there are no libraries
-        if(project.Libraries.length === 0)
-        {
-            errors.push("Need to have at least one library")
-        }
-
-        //there are no tools
-        if(project.Tools.length === 0)
-        {
-            errors.push("Need to have at least one tools")
-        }
-
+        
         //description can't be blank
-        if(project.Description === "")
+        if(project.Description.trim() === "")
         {
             errors.push("Description can't be blank")
         }

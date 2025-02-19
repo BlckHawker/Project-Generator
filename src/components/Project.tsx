@@ -12,15 +12,21 @@ interface Props {
 
 
 const months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-// todo figure how import image name 
 function Project(props: Props) {
     const [projectIndex] = useState<number>(props.projectIndex)
     const [project] = useState<ProjectInterface>(props.projects[props.projectIndex])
+    const [title, setTitle] = useState<string>(project.Title)
+    const [startDate, setStartDate] = useState<string>(project["Start Date"])
+    const [endDate, setEndDate] = useState<string>(project["End Date"])
+    const [imageAltText, setImageAltText] = useState<string>(project.Image.alt)
+    const [languages, setLanguages] = useState<string[]>(project.Languages)
+    const [libraries, setLibraries] = useState<string[]>(project.Libraries)
+    const [tools, setTools] = useState<string[]>(project.Tools)
     const [description, setDescription] = useState<string>(project.Description)
     return (
       <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center", border:"2px solid #ddd"}}>
         <p>Project {projectIndex}</p>
-        {/* Title Text box */}
+        {/* Title */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Title:</p>
             <input type="text" value={project.Title} onChange={titleOnChange}/>
@@ -73,17 +79,22 @@ function Project(props: Props) {
     {
         const newTitle =  event.target.value;
         getProject().Title = newTitle;
+        setTitle(newTitle)
     }
 
     function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
         const date = getDate(event.target.value);
         getProject()["Start Date"] = date;
+        setStartDate(date)
+        console.log(date)
     }
 
     function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
-        getProject()["End Date"] = getDate(event.target.value)
+        const date = getDate(event.target.value)
+        getProject()["End Date"] = date
+        setEndDate(date)
     }
 
     function descriptionOnChange(event: React.ChangeEvent<HTMLTextAreaElement>):void
@@ -112,7 +123,9 @@ function Project(props: Props) {
 
     function fileAltOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().Image.alt = event.target.value.trim();
+        const alt = event.target.value;
+        getProject().Image.alt = alt;
+        setImageAltText(alt);
     }
 
     function getDate(date: string): string
@@ -128,10 +141,17 @@ function Project(props: Props) {
 
     function getFormDate(date: string): string
     {
+        if(date === "Present")
+        {
+            return ""
+        }
+        
         const dateArr = date.split(' ');
         const monthIndex = months.indexOf(dateArr[0]).toString()
         const year = dateArr[1]
         const string = `${year}-${monthIndex.padStart(2, "0")}-01`
+        console.log(`og date: ${date} | form date ${string}`)
+
         return string;
     }
 
@@ -139,25 +159,29 @@ function Project(props: Props) {
     {
         const languages = getNewLanguageLibrariesTools(event);
         getProject().Languages = languages
+        setLanguages(languages)
+
     }
 
     function librariesOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
         const libraries = getNewLanguageLibrariesTools(event);
         getProject().Libraries = libraries
+        setLibraries(libraries)
     }
 
     function toolsOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
         const tools = getNewLanguageLibrariesTools(event);
         getProject().Tools = tools
+        setTools(tools)
     }
 
     function getNewLanguageLibrariesTools(event: React.ChangeEvent<HTMLInputElement>): string[]
     {
         let newArr: string[] = []
         //trim the string of any white spaces
-        const string: string = event.target.value.trim();
+        const string: string = event.target.value;
 
         //split the project based on the ',' character
         let arr = string.split(',')
@@ -179,8 +203,7 @@ function Project(props: Props) {
 
         }
 
-        //alphabetically sort the elements 
-        return newArr.sort((a, b) => a.localeCompare(b))
+        return newArr
     }
 
     function deleteProjectButton(): void
