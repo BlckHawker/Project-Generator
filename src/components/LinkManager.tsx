@@ -8,7 +8,8 @@ interface Props {
 }
 
 function LinkManager(props: Props) {
-    const [links, setLinks] = useState<LinkInterface[]>([])
+    const [links, setLinks] = useState<LinkInterface[]>(props.project.Links)
+
     return (
         <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center"}}>
             {links.map((_, index)=> <Link linkIndex={index} links={links} setLinks={setLinks} project={props.project}/>)}

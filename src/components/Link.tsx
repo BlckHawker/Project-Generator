@@ -14,8 +14,8 @@ function Link(props: Props) {
     return (
     <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
         <p>Link {linkIndex}:</p>
-        <input type="text" placeholder="Name" onChange={nameOnChange}/>
-        <input type="text" placeholder="URL" onChange={urlOnChange}/>
+        <input type="text" placeholder="Name" value={props.links[linkIndex].Name} onChange={nameOnChange}/>
+        <input type="text" placeholder="URL" value={props.links[linkIndex].Link} onChange={urlOnChange}/>
         <button onClick={() => deleteProjectButton()}>Delete link</button>
     </div>
     );

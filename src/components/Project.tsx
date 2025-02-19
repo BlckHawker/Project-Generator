@@ -10,52 +10,56 @@ interface Props {
     setProjects: React.Dispatch<React.SetStateAction<ProjectInterface[]>>
 }
 
+
+const months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+// todo figure how import image name 
 function Project(props: Props) {
     const [projectIndex] = useState<number>(props.projectIndex)
-    const [title, setTile] = useState<string>(props.projects[props.projectIndex].Title)
+    const [project] = useState<ProjectInterface>(props.projects[props.projectIndex])
+    const [description, setDescription] = useState<string>(project.Description)
     return (
       <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center", border:"2px solid #ddd"}}>
         <p>Project {projectIndex}</p>
         {/* Title Text box */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Title:</p>
-            <input type="text" onChange={titleOnChange}/>
+            <input type="text" value={project.Title} onChange={titleOnChange}/>
         </div>
         {/* Start Date */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Start Date:</p>
-            <input type="date" min="2019-01-01" max="2100-12-31" onChange={startDateOnChange} />
+            <input type="date" min="2019-01-01" max="2100-12-31" value={getFormDate(project["Start Date"])} onChange={startDateOnChange} />
         </div>
         {/* End Date */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>End Date:</p>
-            <input type="date" min="2019-01-01" max="2100-12-31" onChange={endDateOnChange}/>
+            <input type="date" min="2019-01-01" max="2100-12-31" value={getFormDate(project["End Date"])} onChange={endDateOnChange}/>
         </div>
         {/* Languages */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Languages:</p>
-            <input type="text" placeholder="Separate multiple languages with a ','" style={{width: "225px"}} onChange={languagesOnChange}/>
+            <input type="text" placeholder="Separate multiple languages with a ','" style={{width: "225px"}} value={project.Languages.join(', ')} onChange={languagesOnChange}/>
         </div>
         {/* Libraries */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Libraries:</p>
-            <input type="text" placeholder="Separate multiple libraries with a ','" style={{width: "225px"}} onChange={librariesOnChange}/>
+            <input type="text" placeholder="Separate multiple libraries with a ','" style={{width: "225px"}} value={project.Libraries.join(', ')} onChange={librariesOnChange}/>
         </div>
         {/* Tools */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Tools:</p>
-            <input type="text" placeholder="Separate multiple tools with a ','" style={{width: "225px"}} onChange={toolsOnChange}/>
+            <input type="text" placeholder="Separate multiple tools with a ','" style={{width: "225px"}} value={project.Tools.join(', ')} onChange={toolsOnChange}/>
         </div>
         {/* Description */}
-        <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}} onChange={descriptionOnChange}>
+        <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Description:</p>
-            <textarea></textarea>
+            <textarea value={project.Description} onChange={descriptionOnChange}></textarea>
         </div>
         {/* Image */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Image:</p>
             <input type="file" id="myFile" name="filename" accept="image/gif, image/png, image/jpeg" onChange={fileSrcOnChange}/>
-            <input type="text" placeholder="Alt text" onChange={fileAltOnChange}/>
+            <input type="text" placeholder="Alt text" value={project.Image.alt} onChange={fileAltOnChange}/>
         </div>
         {/* Links */}
         <h2>Links</h2>
@@ -67,12 +71,14 @@ function Project(props: Props) {
 
     function titleOnChange(event: React.ChangeEvent<HTMLInputElement>) :void
     {
-        getProject().Title = event.target.value;
+        const newTitle =  event.target.value;
+        getProject().Title = newTitle;
     }
 
     function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
-        getProject()["Start Date"] = getDate(event.target.value);
+        const date = getDate(event.target.value);
+        getProject()["Start Date"] = date;
     }
 
     function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
@@ -80,11 +86,13 @@ function Project(props: Props) {
         getProject()["End Date"] = getDate(event.target.value)
     }
 
-    function descriptionOnChange(event: React.ChangeEvent<HTMLInputElement>):void
+    function descriptionOnChange(event: React.ChangeEvent<HTMLTextAreaElement>):void
     {
         //get rid of the white spaces
-        let description = event.target.value.trim()
+        let description = event.target.value
         getProject().Description = description
+        setDescription(description)
+
     }
 
     function fileSrcOnChange(event: React.ChangeEvent<HTMLInputElement>): void
@@ -109,7 +117,6 @@ function Project(props: Props) {
 
     function getDate(date: string): string
     {
-        const months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         const dateRegex = /(\d{4})-(\d{2})-(\d{2})/
         const matches = date.match(dateRegex) ?? ["2025","01","01"]
 
@@ -119,19 +126,31 @@ function Project(props: Props) {
         return finalDate === "January 01" ?  "Present" : finalDate;
     }
 
+    function getFormDate(date: string): string
+    {
+        const dateArr = date.split(' ');
+        const monthIndex = months.indexOf(dateArr[0]).toString()
+        const year = dateArr[1]
+        const string = `${year}-${monthIndex.padStart(2, "0")}-01`
+        return string;
+    }
+
     function languagesOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().Languages = getNewLanguageLibrariesTools(event);
+        const languages = getNewLanguageLibrariesTools(event);
+        getProject().Languages = languages
     }
 
     function librariesOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().Libraries = getNewLanguageLibrariesTools(event);
+        const libraries = getNewLanguageLibrariesTools(event);
+        getProject().Libraries = libraries
     }
 
     function toolsOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        getProject().Tools = getNewLanguageLibrariesTools(event);
+        const tools = getNewLanguageLibrariesTools(event);
+        getProject().Tools = tools
     }
 
     function getNewLanguageLibrariesTools(event: React.ChangeEvent<HTMLInputElement>): string[]
