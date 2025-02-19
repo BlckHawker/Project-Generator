@@ -11,7 +11,8 @@ interface Props {
 }
 
 function Project(props: Props) {
-    const [projectIndex, setProjectIndex] = useState<number>(props.projectIndex)
+    const [projectIndex] = useState<number>(props.projectIndex)
+    const [title, setTile] = useState<string>(props.projects[props.projectIndex].Title)
     return (
       <div style={{gap: "10px", display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center", border:"2px solid #ddd"}}>
         <p>Project {projectIndex}</p>
@@ -53,7 +54,7 @@ function Project(props: Props) {
         {/* Image */}
         <div style={{gap: "10px", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <p>Image:</p>
-            <input type="file" id="myFile" name="filename" onChange={fileSrcOnChange}/>
+            <input type="file" id="myFile" name="filename" accept="image/gif, image/png, image/jpeg" onChange={fileSrcOnChange}/>
             <input type="text" placeholder="Alt text" onChange={fileAltOnChange}/>
         </div>
         {/* Links */}
@@ -71,12 +72,12 @@ function Project(props: Props) {
 
     function startDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
-        getProject().StartDate = getDate(event.target.value);
+        getProject()["Start Date"] = getDate(event.target.value);
     }
 
     function endDateOnChange(event: React.ChangeEvent<HTMLInputElement>):void
     {
-        getProject().EndDate = getDate(event.target.value)
+        getProject()["End Date"] = getDate(event.target.value)
     }
 
     function descriptionOnChange(event: React.ChangeEvent<HTMLInputElement>):void
@@ -88,11 +89,16 @@ function Project(props: Props) {
 
     function fileSrcOnChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
-        if(event.target !== null && event.target.files !== null)
+        const project: ProjectInterface = getProject();
+        const image: ImageInterface = project.Image;
+        if(event.target !== null && event.target.files !== null && event.target.files.length > 0)
         {
-            const project: ProjectInterface = getProject();
-            const image: ImageInterface = project.Image;
             image.src = `img/${event.target.files[0].name}`
+        }
+
+        else
+        {
+            image.src = "";
         }
     }
 
@@ -143,27 +149,13 @@ function Project(props: Props) {
         //remove any empty string elements 
         .filter(l => l !== "")
         
-        //for each element make it so the first character is capitalized and the rest are lower cased
         for(const element of arr)
         {
             //remove any duplicate elements 
             if(newArr.find(l => l.toUpperCase() === element.toUpperCase()) === undefined)
             {
-                let newElement: string = "";
-                if(element.length == 1)
-                {
-                    newElement = element.toUpperCase();
-                }
-        
-                else if(element.length > 1)
-                {
-                    newElement = element.toUpperCase()[0] + element.substring(1).toLowerCase()
-                }
-    
-                if(newElement !== "")
-                {
-                    newArr.push(newElement)
-                }
+
+                newArr.push(element)
             }
 
         }
